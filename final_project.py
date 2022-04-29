@@ -1,3 +1,4 @@
+from glob import glob
 import pygame, pgzrun, numpy, os
 
 START_POS = 250,400
@@ -8,12 +9,20 @@ bullet = "bullet.png"
 WIDTH = 1500
 HEIGHT = 500
 
+#Animation frames
+doomguy_walk1 = "doomguy_walk1.png"
+doomguy_walk2 = "doomguy_walk2.png"
+doomguy_walk3 = "doomguy_walk3.png"
+doomguy_walk4 = "doomguy_walk4.png"
+stand_still = True
+walk1 = False
+walk2 = False
+walk3 = False
+walk4 = False
+
+
 #Doomguy ---------------------------------------------
 class Doomguy():
-
-    def DG_Walk_animation(self):        
-        if keyboard.d:
-            doomguy_model == ("doomguy_walk1.png")
 
     def DG_walk(self):
         if keyboard.a and self.actor.x > 0:
@@ -28,6 +37,16 @@ class Doomguy():
         self.bullet = Actor(bullet)
         self.bullet.pos = (START_POS)
 
+    def DG_Walk_animation(self):
+        global walk1, walk2, walk3, walk4, stand_still
+
+        if stand_still == True and keyboard.d:
+            self.actor.image = doomguy_model
+            stand_still = False
+        else:
+            self.actor.image = doomguy_walk1
+            stand_still = True
+
     def shoot(self):
         if keyboard.q:
             self.bullet.draw
@@ -39,6 +58,7 @@ class Doomguy():
 game_over = False
 game_complete = False
 DG = Doomguy()
+num_of_updates = 0
 
 
 def draw():
@@ -46,9 +66,14 @@ def draw():
     DG.actor.draw()
 
 def update():
+    global num_of_updates
     DG.DG_walk()
-    DG.DG_Walk_animation()
     DG.shoot()
 
+    if num_of_updates == 10:
+        DG.DG_Walk_animation()
+        num_of_updates = 0
+    else:
+        num_of_updates += 1
 
 pgzrun.go()
