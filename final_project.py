@@ -1,4 +1,4 @@
-from glob import glob
+from ast import walk
 import pygame, pgzrun, numpy, os
 
 START_POS = 250,400
@@ -7,7 +7,7 @@ bullet = "bullet.png"
 
 #Screen Size
 WIDTH = 1500
-HEIGHT = 500
+dsasdHEIGHT = 500
 
 #Animation frames
 doomguy_walk1 = "doomguy_walk1.png"
@@ -23,12 +23,15 @@ walk4 = False
 
 #Doomguy ---------------------------------------------
 class Doomguy():
-
+   
     def DG_walk(self):
+        global walk1
         if keyboard.a and self.actor.x > 0:
             self.actor.x -=5
+            
         elif keyboard.d and self.actor.x < WIDTH:
             self.actor.x +=5
+            walk1 = True
 
     def __init__(self):
         self.actor = Actor(doomguy_model)
@@ -39,13 +42,27 @@ class Doomguy():
 
     def DG_Walk_animation(self):
         global walk1, walk2, walk3, walk4, stand_still
+        walkupdate = 0
 
-        if stand_still == True and keyboard.d:
-            self.actor.image = doomguy_model
+        if keyboard.d == True:
             stand_still = False
-        else:
+        
+        if stand_still == False and walkupdate == 0:
             self.actor.image = doomguy_walk1
+            walkupdate += 1
+        elif stand_still == False and walkupdate == 1:
+            self.actor.image = doomguy_walk2
+            walkupdate += 1
+        elif stand_still == False and walkupdate == 2:
+            self.actor.image = doomguy_walk3
+            walkupdate += 1
+        elif stand_still == False and walkupdate == 3:
+            self.actor.image = doomguy_walk4
+            walkupdate += 1   
+        else:
+            self.actor.image = doomguy_model
             stand_still = True
+            
 
     def shoot(self):
         if keyboard.q:
