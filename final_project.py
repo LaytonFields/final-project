@@ -1,4 +1,3 @@
-from ast import walk
 import pygame, pgzrun, numpy, os
 
 START_POS = 250,400
@@ -15,10 +14,8 @@ doomguy_walk2 = "doomguy_walk2.png"
 doomguy_walk3 = "doomguy_walk3.png"
 doomguy_walk4 = "doomguy_walk4.png"
 stand_still = True
-walk1 = False
-walk2 = False
-walk3 = False
-walk4 = False
+walkupdate = 0
+
 
 
 #Doomguy ---------------------------------------------
@@ -41,27 +38,21 @@ class Doomguy():
         self.bullet.pos = (START_POS)
 
     def DG_Walk_animation(self):
-        global walk1, walk2, walk3, walk4, stand_still
-        walkupdate = 0
-
+        global stand_still, walkupdate
+        
         if keyboard.d == True:
             stand_still = False
+        else:
+            stand_still = True
         
-        if stand_still == False and walkupdate == 0:
+        if stand_still == False:
             self.actor.image = doomguy_walk1
             walkupdate += 1
-        elif stand_still == False and walkupdate == 1:
+            print(int(walkupdate))
+        elif walkupdate >= 1:
             self.actor.image = doomguy_walk2
-            walkupdate += 1
-        elif stand_still == False and walkupdate == 2:
-            self.actor.image = doomguy_walk3
-            walkupdate += 1
-        elif stand_still == False and walkupdate == 3:
-            self.actor.image = doomguy_walk4
-            walkupdate += 1   
         else:
             self.actor.image = doomguy_model
-            stand_still = True
             
 
     def shoot(self):
@@ -85,12 +76,8 @@ def draw():
 def update():
     global num_of_updates
     DG.DG_walk()
-    DG.shoot()
+    DG.shoot() 
+    clock.schedule_interval(DG.DG_Walk_animation, 1.0)
 
-    if num_of_updates == 10:
-        DG.DG_Walk_animation()
-        num_of_updates = 0
-    else:
-        num_of_updates += 1
 
 pgzrun.go()
