@@ -9,6 +9,7 @@ WIDTH = 1500
 HEIGHT = 500
 
 #Animation frames
+animatonframes = ["doomguy_r.png", "doomguy_l.png","doomguy_walk1l.png", "doomguy_walk1r.png"]
 doomguy_walk1L = "doomguy_walk1l.png"
 doomguy_walk1R = "doomguy_walk1r.png"
 stand_still = True
@@ -22,7 +23,7 @@ right = False
 class Doomguy():
 
     def __init__(self):
-        self.actor = Actor(doomguy_model)
+        self.actor = Actor(animatonframes[0])
         self.actor.pos = (START_POS)
 
         self.bullet = Actor(bullet)
@@ -43,33 +44,34 @@ class Doomguy():
             left = False
             right = True
             stand_still = False
-        
-    #animation------------------------------------------------
-        
-        if stand_still == False and right == True and left == False:
-            self.actor.image = doomguy_walk1R
-            stand_still = True
-        elif stand_still == False and left == True and right == False:
-            self.actor.image = doomguy_walk1L
-            stand_still = True
-        elif left == True and stand_still == True:
-            self.actor.image = 'doomguy_l.png'
-            left = False
-        elif right == True and stand_still == True:
-            self.actor.image = 'doomguy_r.png'
-            right = False
 
     #Shoot---------------------------------------------------------
         if keyboard.q:
-           self.actor.image = 'doomguy_shoot.png'
-           self.bullet.draw()
+            self.actor.image = 'doomguy_shoot.png'
+            self.bullet.draw()
+ 
+
+    def animation(self):
+        global stand_still, walkupdate, left, right
+
+        if stand_still == False and right == True and left == False:
+            self.actor.image = animatonframes[3]
+            stand_still = True
+        elif stand_still == False and left == True and right == False:
+            self.actor.image = animatonframes[2]
+            stand_still = True
+        elif left == True and stand_still == True:
+            self.actor.image = animatonframes[1]
+            left = False
+        elif right == True and stand_still == True:
+            self.actor.image = animatonframes[0]
+            right = False
+
 
 #Setup and Variables--------------------------------------------
 
 
 #Variables
-game_over = False
-game_complete = False
 DG = Doomguy()
 num_of_updates = 0
 
@@ -80,5 +82,6 @@ def draw():
 
 def update():
     DG.update()
+    DG.animation()
 
 pgzrun.go()
